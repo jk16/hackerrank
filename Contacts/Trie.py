@@ -126,23 +126,7 @@ class Trie:
         return to_return
 
 
-def tests():
-    #test trie
-    trie = Trie()
-    assert trie.root == {}
 
-    #test add: "ate"
-    
-    assert trie.add("ate") == {'a': [False, {'t': [False, {'e': [True, {None}]}]}]}
-    assert trie.add("atom") == {'a': [False, {'t': [False, {'e': [True, {None}], 'o': [False, {'m': [True, {None}]}]}]}]}
-    print ("tests passed")
-
-if __name__ == "__main__":
-    """
-    Purpose: If you use as a module code wont get executed
-             If you use it as an executable it will get called 
-    """
-    tests()
 
 
 
