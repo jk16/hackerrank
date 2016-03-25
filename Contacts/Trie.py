@@ -39,6 +39,18 @@ class Trie:
             self.root[word[0]] = new_tree[word[0]]
             return self.root
 
+
+
+    def find(self,word, root):
+        """
+        number of contacts who have a name starting with that partial name.
+        """
+        pass
+
+        
+    """
+    Helper functions
+    """
     def build_tree(self,word):
         """
         Given string builds a tree
@@ -62,15 +74,6 @@ class Trie:
                 child[letter] = [is_word, {None}]
             
         return root
-
-    def find(self,word, root):
-        """
-        number of contacts who have a name starting with that partial name.
-        """
-        pass
-    """
-    Helper functions
-    """
 
     def word_in_trie(self,root, user_word):
         """
