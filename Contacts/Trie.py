@@ -1,55 +1,130 @@
 """
 Implementation of a Trie:
 operations: ADD/FIND
-
-
 """
 
 
-def root():
-    return {}
+class Trie:
+    def __init__(self):
+        self.root = {}
 
-
-"""
-Main operations: add/find
-"""
-
-
-def add(word, root):
     """
-    ******************************************************************
-    Given a word and a root of a Trie returns a new root with the word
-    ******************************************************************
-
-    example 1: word="ate" and root = {}
-                output: {'a': [False, {'t': [False, {'e': [True, {None}]}]}]}
-
-    example 2: word="atom" and root = {'a': [False, {'t': [False, {'e': [True, {None}]}]}]}
-
-                    step 1: word and root --> "at" ie the union
-                    step 2: decompose word into: part in Trie and part not in Trie ie "at" + "om"
-                    step 3: build a tree using "om" ie o --> m
-                    step 4: connect a --> t with o --> m
+    Main operations: add/find
     """
 
-    #is first letter of the word in the root?
-    is_word_in_trie = is_in_trie(word, root)
 
-    # if word is in Trie then just add it to the Trie
-    # else create a new tree and add it to the trie
-    #
-def find(word, root):
+    def add(self,word):
+        """
+        ******************************************************************
+        Given a word and a root of a Trie returns a new root with the word
+        ******************************************************************
+
+        example 1: word="ate" and root = {}
+                    output: {'a': [False, {'t': [False, {'e': [True, {None}]}]}]}
+
+        example 2: word="atom" and root = {'a': [False, {'t': [False, {'e': [True, {None}]}]}]}
+
+                        step 1: word and root --> "at" ie the union
+                        step 2: decompose word into: part in Trie and part not in Trie ie "at" + "om"
+                        step 3: build a tree using "om" ie o --> m
+                        step 4: connect a --> t with o --> m
+        """
+        dummy_root = self.root
+        if word[0] in self.root:
+            letters_in_trie = self.union_trie_and_user_word(self.root, word)
+            add_to_tree = self.word_in_trie(root, letters_in_trie)
+            new_tree = self.build_tree(word.replace(letters_in_trie, ""))
+        else:
+            new_tree = self.build_tree(word)
+            self.root[word[0]] = new_tree[word[0]]
+            return self.root
+
+    def build_tree(self,word):
+        """
+        Given string builds a tree
+        example "ate"
+        a --> t --> e
+        """
+        
+        root = {}
+        root[word[0] ] = [False, {}]
+        
+        child = root[word[0]][1]
+        word = word.replace(word[0] , "")
+
+        for i, letter in enumerate(word):
+            is_word = i == (len(word) - 1)
+            if not is_word:
+                child[letter] = [is_word, {}]
+            
+                child = child[letter][1]
+            else:
+                child[letter] = [is_word, {None}]
+            
+        return root
+
+    def find(self,word, root):
+        """
+        number of contacts who have a name starting with that partial name.
+        """
+        pass
     """
-    number of contacts who have a name starting with that partial name.
+    Helper functions
     """
 
-"""
-Helper functions
-"""
+    def word_in_trie(self,root, user_word):
+        """
+        Given root of a trie and a word gets the letters that exist in the trie
+        example:
+        input: word="atom" and root: a-->t-->e 
+        out: what t points to
+
+        """
+        
+        if len(user_word) <= 0:
+            return "must have letters"
+        dummy_root = root
+        same_letters = ""
+        for l in user_word:
+            if l in dummy_root:
+                same_letters += l
+                dummy_root = dummy_root[l][1]
+            else:
+                break
+        
+        return dummy_root
+
+
+    def union_trie_and_user_word(self,root, user_word):
+        """
+        Given root of a trie and a word gets the letters that exist in the trie
+        example:
+        input: word="atom" and root: a-->t-->e 
+        out: "at"
+
+        """
+        same_letters = ""
+        dummy_root = root
+        for l in user_word:
+            if l in dummy_root:
+                same_letters += l
+                dummy_root = dummy_root[l][1]
+            else:
+                break
+
+        empty_string = len(same_letters) == 0
+        to_return = None if empty_string else same_letters
+        return to_return
 
 
 def tests():
-    print (root())
+    #test trie
+    trie = Trie()
+    assert trie.root == {}
+
+    #test add: "ate"
+    assert trie.add("ate") == {'a': [False, {'t': [False, {'e': [True, {None}]}]}]}
+    print ("tests passed")
 
 if __name__ == "__main__":
     """
