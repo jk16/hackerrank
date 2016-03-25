@@ -29,11 +29,17 @@ class Trie:
                         step 3: build a tree using "om" ie o --> m
                         step 4: connect a --> t with o --> m
         """
-        dummy_root = self.root
+
         if word[0] in self.root:
-            letters_in_trie = self.union_trie_and_user_word(self.root, word)
-            add_to_tree = self.word_in_trie(root, letters_in_trie)
-            new_tree = self.build_tree(word.replace(letters_in_trie, ""))
+            letters_in_trie = self.union_trie_and_user_word(self.root, word) #"at"
+            letters_not_in_trie = word.replace(letters_in_trie, "")
+
+            add_to_tree = self.word_in_trie(self.root, letters_in_trie) #t --> 
+            new_tree = self.build_tree(letters_not_in_trie) #t --> + o --> m
+            add_to_tree[letters_not_in_trie[0]] = new_tree[letters_not_in_trie[0]]
+
+            # self.root[word[0]][1] = new_tree
+            return self.root
         else:
             new_tree = self.build_tree(word)
             self.root[word[0]] = new_tree[word[0]]
@@ -47,7 +53,7 @@ class Trie:
         """
         pass
 
-        
+
     """
     Helper functions
     """
@@ -126,7 +132,9 @@ def tests():
     assert trie.root == {}
 
     #test add: "ate"
+    
     assert trie.add("ate") == {'a': [False, {'t': [False, {'e': [True, {None}]}]}]}
+    assert trie.add("atom") == {'a': [False, {'t': [False, {'e': [True, {None}], 'o': [False, {'m': [True, {None}]}]}]}]}
     print ("tests passed")
 
 if __name__ == "__main__":
